@@ -9,3 +9,5 @@ export const deleteEvent = async (id) => await axios.delete(import.meta.env.VITE
 export const updateEvent = async (payload) => await axios.put(import.meta.env.VITE_APP_API + '/event', payload);
 
 export const getEmployee = async () => await axios.get(import.meta.env.VITE_APP_API + '/employee');
+
+export const queryEvent = async (payload) => await axios.post(import.meta.env.VITE_APP_API + '/query', payload);

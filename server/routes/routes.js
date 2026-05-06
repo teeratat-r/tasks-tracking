@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { getDemo, createEvent, getEvent, deleteEvent, updateEvent, getEmployee } = require('../controllers/controllers')
+const { getDemo, createEvent, getEvent, deleteEvent, updateEvent, getEmployee, queryEvent } = require('../controllers/controllers')
 
 // @Endpoint    localhost:5000/api/demo
 // @Method      GET
@@ -35,6 +35,12 @@ router.put('/event', updateEvent);
 // @Method      GET
 // @Access      Public
 router.get('/employee', getEmployee);
+
+
+// @Endpoint    localhost:5000/api/query
+// @Method      POST
+// @Access      Public
+router.post('/query', queryEvent);
 
 
 module.exports = router;

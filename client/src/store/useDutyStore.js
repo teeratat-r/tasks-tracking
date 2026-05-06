@@ -1,11 +1,16 @@
 import { create } from 'zustand';
 import { getEvent, getEmployee } from '../api/api';
 import axios from 'axios';
+import FullCalendar from '@fullcalendar/react';
 
 
 const dutyStore = (set) => ({
     events: [],
     employees: [],
+    queryEvents: [],
+    fullCalendarEl: null,
+    setQueryEvents: (data) => set({ queryEvents: data }),
+    setFullCalendarEl: (data) => set({ fullCalendarEl: data}),
     fetchAll: async () => {
         try {
             // const events = await getEvent();

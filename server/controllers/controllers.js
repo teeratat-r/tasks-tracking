@@ -1,6 +1,8 @@
 const Events = require('../model/Events')
 const Employees = require('../model/Employees')
 
+const moment = require('moment');
+
 exports.getDemo = (req, res) => {
     console.log('Get Demo Seccess');
     res.send('Get Demo Success');
@@ -57,5 +59,19 @@ exports.getEmployee = async (req, res) => {
     } catch (error) {
         console.log('getEmployee ERROR', error);
         res.status(500).send('getEmployee ERROR');
+    }
+}
+
+exports.queryEvent = async (req, res) => {
+    try {
+        const startDate = new Date(req.body.start);
+        const endDate = new Date(req.body.end);
+        console.log('endDate:', endDate);
+        const queryEvents = await Events.find({ $and: [ { start: { $gte: startDate } }, { end: { $lte: endDate } } ]}).sort({ start: 1 })
+        console.log(queryEvents);
+        res.status(200).send(queryEvents);
+    } catch (error) {
+        console.log('queryEvent ERROR', error);
+        res.status(500).send('queryEvent ERROR');
     }
 }

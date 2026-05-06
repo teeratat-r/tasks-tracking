@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { Row, Col, Flex } from 'antd';
-import Header from './components/layout/header/Header';
-import Calendar from './components/layout/calendar/Calendar';
+import Header from './components/header/Header';
+import Calendar from './components/calendar/Calendar';
 import useDutyStore from './store/useDutyStore'
-import Sidebar from './components/layout/sidebar/Sidebar';
+import Sidebar from './components/sidebar/Sidebar';
 
 function App() {
   
