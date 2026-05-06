@@ -95,6 +95,7 @@ const Calendar = () => {
             ...values,
             [info.target.name]: info.target.value
         });
+        console.log(values);
     }
 
     const handleOnSelectValue = (info) => {
@@ -104,7 +105,6 @@ const Calendar = () => {
             color: bgColor,
             personInCharge: name,
         })
-        console.log(values);
     }
 
     /**

@@ -4,6 +4,7 @@ import { Row, Col, Flex } from 'antd';
 import Header from './components/layout/header/Header';
 import Calendar from './components/layout/calendar/Calendar';
 import useDutyStore from './store/useDutyStore'
+import Sidebar from './components/layout/sidebar/Sidebar';
 
 function App() {
   
@@ -24,7 +25,7 @@ function App() {
       </Row>
       <Row>
         <Col span={8} className='bg-white'>
-          Col1
+          <Sidebar />
         </Col>
         <Col span={16} className='bg-white'>
           <div className='px-6'>
