@@ -17,6 +17,7 @@ This is the backend server for the Calendar Tasks Tracking System. It is built w
 
 ## 📂 Project Structure
 
+```text
 server/
 ├── config/
 │   └── db.js           # MongoDB connection logic

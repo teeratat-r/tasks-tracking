@@ -33,6 +33,7 @@ This is the frontend application for the Calendar Tasks Tracking System, built w
 
 ## 📂 Project Structure
 
+```text
 src/
 ├── api/
 │   └── api.js          # Axios services for CRUD and Query operations
