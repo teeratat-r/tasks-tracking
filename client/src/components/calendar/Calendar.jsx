@@ -22,19 +22,16 @@ const Calendar = () => {
     const events = useDutyStore((state) => state.events);
     const employees = useDutyStore((state) => state.employees);
     const queryEvents = useDutyStore((state) => state.queryEvents);
+    const taskStatus = useDutyStore((state) => state.taskStatus);
+    const queryStatus = useDutyStore((state) => state.queryStatus);
     const setFullCalendarEl = useDutyStore((state) => state.setFullCalendarEl);
     const fetchAll = useDutyStore((state) => state.fetchAll);
 
     // Component State
     const [isDateModalOpen, setIsDateModalOpen] = useState(false);
     const [isEventInfoModalOpen, setIsEventInfoModalOpen] = useState(false);
-    // const displayEvents = queryEvents || events;
-    
-    if(queryEvents.length > 0) {
-        var displayEvents = queryEvents
-    } else {
-        var displayEvents = events
-    }
+
+    const displayEvents = queryStatus?queryEvents:events
 
     const calendarEl = useRef(null);
     
@@ -48,8 +45,9 @@ const Calendar = () => {
         title: '',
         start: '',
         end: '',
-        personInCharge: '',
         color: '',
+        status: '',
+        personInCharge: '',
         description: '',
     });
 
@@ -61,8 +59,9 @@ const Calendar = () => {
             title: '',
             start: '',
             end: '',
-            personInCharge: '',
+            status: '',
             color: '',
+            personInCharge: '',
             description: '',
         })
     }
@@ -73,10 +72,14 @@ const Calendar = () => {
      */
 
     const handleSelectDate = (info) => {
+        const status = 'Pending';
+        const { color } = taskStatus.find(item => item.name === status);
         setValues({
             ...values,
             start: info.startStr,
             end: info.endStr,
+            status: status,
+            color: color,
         })
         showDateModal();
     }
@@ -113,12 +116,19 @@ const Calendar = () => {
         console.log(values);
     }
 
-    const handleOnSelectValue = (info) => {
-        const { name, bgColor } = employees.find(item => item._id === info)
+    const handleOnSelectPersonInCharge = (name) => {
         setValues({
             ...values,
-            color: bgColor,
             personInCharge: name,
+        })
+    }
+
+    const handleOnSelectStatus = (status) => {
+        const { color } = taskStatus.find(item => item.name === status)
+        setValues({
+            ...values,
+            status: status,
+            color: color,
         })
     }
 
@@ -126,15 +136,16 @@ const Calendar = () => {
      * On Click Event
      */
     const handleClickEvent = (info) => {
-        const { title, start, end, extendedProps } = info.event;
-        const { personInCharge, color, description, _id } = extendedProps;
+        const { title, start, end, extendedProps, ui, backgroundColor } = info.event;
+        const { personInCharge, status, description, _id } = extendedProps;
         setValues({
             _id: _id,
             title: title,
             start: moment(start).format('D MMM YYYY'),
             end: moment(end).add('-1', 'day').format('D MMM YYYY'),
             personInCharge: personInCharge,
-            color: color,
+            color: backgroundColor,
+            status: status,
             description: description,
         })
         showEventInfoModal();
@@ -183,11 +194,12 @@ const Calendar = () => {
      * Tooltip Event
      */
     const renderEventContent = (info) => {
-        const { personInCharge } = info.event.extendedProps;
+        const { personInCharge, status } = info.event.extendedProps;
         const tooltipTitle = (
             <div className='text-gray-800 bg-white rounded-md'>
-                <div className='px-3 py-2 font-bold border-b border-gray-200'>
-                    {info.event.title}
+                <div className='px-3 py-2 border-b border-gray-200 flex flex-col gap-1'>
+                    <span className='font-bold'>{info.event.title} </span>
+                    <span>{status}</span>
                 </div>
                 <div className='px-3 py-2 text-sm leading-snug'>
                     <p className='text-xs text-gray-500 italic'>
@@ -212,9 +224,17 @@ const Calendar = () => {
      * Person In Charge Option
      */
     const personInChargeOptions = employees.reduce((total, current) => {
-        total.push({ value: current._id, label: current.name})
+        total.push({ value: current.name, label: current.name})
         return total;
     },[])
+
+    /**
+     * Task Status Option
+     */
+    const taskStatusOptions = taskStatus.reduce((total, current) => {
+        total.push({ value: current.name, label: current.name })
+        return total;
+    }, [])
 
     return (
         <div>
@@ -275,7 +295,7 @@ const Calendar = () => {
                             allowClear
                             options={personInChargeOptions}
                             placeholder="Select Person In Charge"
-                            onSelect={handleOnSelectValue}
+                            onSelect={handleOnSelectPersonInCharge}
                             status={!values.personInCharge ? 'error' : 'Required'}
                             value={values.personInCharge || undefined} 
                         />
@@ -324,6 +344,18 @@ const Calendar = () => {
                         <span>{values.end}</span>
                     </div>
                     <div className='flex gap-2 items-center'>
+                        <span className='font-semibold'>Status: </span>
+                        <Select
+                            name='status' 
+                            style={{ width: 'auto' }}
+                            options={taskStatusOptions}
+                            placeholder="Current Status"
+                            onSelect={handleOnSelectStatus}
+                            status={!values.status ? 'error' : 'Required'}
+                            value={values.status || undefined} 
+                        />
+                    </div>
+                    <div className='flex gap-2 items-center'>
                         <span className='font-semibold'>Person In Charge: </span>
                         <Select
                             name='personInCharge' 
@@ -331,7 +363,7 @@ const Calendar = () => {
                             allowClear
                             options={personInChargeOptions}
                             placeholder="Select Person In Charge"
-                            onSelect={handleOnSelectValue}
+                            onSelect={handleOnSelectPersonInCharge}
                             status={!values.personInCharge ? 'error' : 'Required'}
                             value={values.personInCharge || undefined} 
                         />

@@ -66,8 +66,10 @@ exports.queryEvent = async (req, res) => {
     try {
         const startDate = new Date(req.body.start);
         const endDate = new Date(req.body.end);
+        console.log('startDate:', startDate);
         console.log('endDate:', endDate);
-        const queryEvents = await Events.find({ $and: [ { start: { $gte: startDate } }, { end: { $lte: endDate } } ]}).sort({ start: 1 })
+        // const queryEvents = await Events.find({ $and: [ { start: { $gte: startDate } }, { end: { $lte: endDate } } ]}).sort({ start: 1 })
+        const queryEvents = await Events.find({ start: {$lte: endDate}, end: {$gte: startDate}}).sort({ start: 1 })
         console.log(queryEvents);
         res.status(200).send(queryEvents);
     } catch (error) {

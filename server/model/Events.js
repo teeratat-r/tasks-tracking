@@ -13,6 +13,9 @@ const eventSchema = mongoose.Schema({
     personInCharge: {
         type: String
     },
+    status: {
+        type: String
+    },
     color: {
         type: String
     },

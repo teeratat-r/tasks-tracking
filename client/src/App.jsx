@@ -19,7 +19,7 @@ function App() {
   
 
   return (
-    <div className='bg-gray-200 h-screen'>
+    <div className='bg-gray-200'>
       <Row className='bg-white p-6'>
         <Header />
       </Row>
