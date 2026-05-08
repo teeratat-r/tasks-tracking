@@ -16,30 +16,20 @@ import useDutyStore from '../../store/useDutyStore'
 
 const Calendar = () => {
 
-    /**
-     * Global State
-     */
-    const events = useDutyStore((state) => state.events);
-    const employees = useDutyStore((state) => state.employees);
-    const queryEvents = useDutyStore((state) => state.queryEvents);
-    const taskStatus = useDutyStore((state) => state.taskStatus);
-    const queryStatus = useDutyStore((state) => state.queryStatus);
-    const setFullCalendarEl = useDutyStore((state) => state.setFullCalendarEl);
-    const fetchAll = useDutyStore((state) => state.fetchAll);
+    // --- Global State ---
+    const { 
+        events, 
+        employees, 
+        queryEvents, 
+        taskStatus, 
+        queryStatus, 
+        setFullCalendarEl, 
+        fetchAll 
+    } = useDutyStore();
 
-    // Component State
+    // --- Component State ---
     const [isDateModalOpen, setIsDateModalOpen] = useState(false);
     const [isEventInfoModalOpen, setIsEventInfoModalOpen] = useState(false);
-
-    const displayEvents = queryStatus?queryEvents:events
-
-    const calendarEl = useRef(null);
-    
-    useEffect(() => {
-        setFullCalendarEl(calendarEl);
-    },[setFullCalendarEl])
-
-    // Select Date Model State
     const [values, setValues] = useState({
         _id: '',
         title: '',
@@ -51,9 +41,15 @@ const Calendar = () => {
         description: '',
     });
 
-    /**
-     * Clear Values State Function
-     */
+    const calendarEl = useRef(null);
+    const displayEvents = queryStatus?queryEvents:events
+
+    // --- Lifecycle ---
+    useEffect(() => {
+        setFullCalendarEl(calendarEl);
+    },[setFullCalendarEl])
+
+    // --- Helpers ---
     const clearValues = () => {
         setValues({
             title: '',
@@ -70,7 +66,6 @@ const Calendar = () => {
     /**
      * Select Date Modal
      */
-
     const handleSelectDate = (info) => {
         const status = 'Pending';
         const { color } = taskStatus.find(item => item.name === status);
